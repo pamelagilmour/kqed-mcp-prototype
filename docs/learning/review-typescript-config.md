@@ -43,3 +43,33 @@ At Compilation: tsc converts to JavaScript (.js)
 At Execution: Node.js runs the JavaScript (.js)
 
 Node.js cannot run TypeScript directly - it only understands JavaScript. That's why we need the tsc compiler as a build step.
+
+-----------------------------------------------------------
+When you need to rebuild
+
+After editing src/index.ts (the TypeScript source code)
+
+Claude Desktop actually runs dist/index.js (the compiled JavaScript)
+
+When you run npm run build, the TypeScript compiler (tsc) does this:
+
++ Reads src/index.ts
++ Compiles it to JavaScript
++ Outputs dist/index.js
+
+The Workflow
+Edit TypeScript → Build → Claude Desktop Uses Compiled JS
+   src/index.ts  → npm run build → dist/index.js
+
+
+So after EVERY change to your TypeScript code, you need to:
+
+Run npm run build
+Restart Claude Desktop (so it picks up the new compiled code)
+
+
+___________________________________________________________
+
+TypeScript is the "source" (what you write)
+JavaScript is the "executable" (what actually runs)
+Building is like compiling C code before running it

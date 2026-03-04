@@ -90,7 +90,43 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   }
 
   if (request.params.name === "search_kqed_posts") {
-    const limit = (request.params.arguments as { limit?: number })?.limit || 10;
+    // Extract and validate the limit parameter
+    const rawLimit = (request.params.arguments as { limit?: number })?.limit;
+    
+    // Input Validation: Set safe default if not provided
+    // Never operate without a value
+    // If something goes wrong, fall back to a safe, reasonable default
+    let limit = rawLimit !== undefined ? rawLimit : 10;
+    
+    // Input Validation: Type check - ensure it's a number
+    // Prevents injection attacks, reject anything that's not a valid number.
+    if (typeof limit !== "number" || isNaN(limit)) {
+      return {
+        content: [{
+          type: "text",
+          text: "Error: limit must be a valid number"
+        }],
+        isError: true,
+      };
+    }
+    
+    // Input Validation: Range check - prevent abuse
+    // Too small: pointless query
+    // Too large: could overwhelm API or cause performance issues
+    // Prevents resource exhaustion attacks
+    if (limit < 1 || limit > 100) {
+      return {
+        content: [{
+          type: "text",
+          text: "Error: limit must be between 1 and 100"
+        }],
+        isError: true,
+      };
+    }
+    
+    // Input Validation: Ensure integer (no decimals)
+    // Ensures clean, predictable values go to the API
+    limit = Math.floor(limit);
     
     try {
       const data = await fetchKQEDPosts(limit);

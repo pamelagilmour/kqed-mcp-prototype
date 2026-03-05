@@ -48,7 +48,7 @@ kqed-mcp-prototype/
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/YOUR_USERNAME/kqed-mcp-prototype.git
+git clone https://github.com/pamelagilmour/kqed-mcp-prototype.git
 cd kqed-mcp-prototype
 ```
 
